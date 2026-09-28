@@ -19,6 +19,12 @@ vp install
 
 ## Deploy to a chain
 
+Each chain in `chain.config.json` has a `target` that picks the deploy
+platform: `the-graph` (Subgraph Studio) or `goldsky`. The manifests are
+identical; only the deploy command and one-time auth differ.
+
+### The Graph (Subgraph Studio)
+
 1. Create a Subgraph Studio project for the chain you want. Copy its slug
    from the Studio page.
 2. Authenticate once with your deploy key.
@@ -39,7 +45,26 @@ vp install
    This generates the chain's manifest, runs codegen, builds it, and pushes
    it to Studio. Version defaults to `dev` if you skip `--version`.
 
-Deploy to several chains at once. Each still needs its own Studio project.
+### Goldsky
+
+1. Set the chain's `target` to `goldsky` in `chain.config.json`.
+2. Authenticate once with an API key from your Goldsky project settings.
+
+   ```sh
+   bunx @goldskycom/cli login
+   ```
+
+3. Run the deploy script with the Goldsky subgraph name as the slug.
+
+   ```sh
+   bun run deploy -- sepolia=erc-8004-sepolia --version 1.0.0
+   ```
+
+   Goldsky deploys as `<slug>/<version>`, and a version that already exists
+   is rejected, so bump `--version` on each deploy.
+
+Deploy to several chains at once. Each still needs its own Studio project
+or Goldsky subgraph name.
 
 ```sh
 bun run deploy -- \
@@ -70,6 +95,7 @@ the values.
   "your-chain": {
     "network": "the-graph-network-id",
     "chainId": 123,
+    "target": "the-graph",
     "contracts": {
       "identity": { "address": "0x...", "startBlock": 100 },
       "reputation": { "address": "0x...", "startBlock": 100 },
@@ -81,6 +107,10 @@ the values.
 
 - `network` is the id from The Graph's
   [supported networks page](https://thegraph.com/docs/en/supported-networks/).
+  Goldsky uses the same ids; its list is on the
+  [Goldsky supported networks page](https://docs.goldsky.com/chains/supported-networks).
+- `target` is `the-graph` or `goldsky` and picks where the deploy script
+  pushes the build.
 - `startBlock` should be the block where the contract was deployed. Zero
   works, but wastes time indexing history you don't need.
 - `validation` is optional. The deploy script ignores it while that data

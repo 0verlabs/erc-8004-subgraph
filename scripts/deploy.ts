@@ -6,6 +6,7 @@ const options = parseArgs(Bun.argv.slice(2));
 
 for (const target of options.targets) {
   const chain = requireChain(target.chain);
+  const platform = requireTarget(target.chain, chain);
   const manifest = await generateManifest(target.chain, chain);
 
   console.log(`\nBuilding ${target.chain} (${chain.chainId})`);
@@ -14,7 +15,23 @@ for (const target of options.targets) {
 
   if (options.buildOnly) continue;
 
-  console.log(`Deploying ${target.chain} to ${target.slug}`);
+  console.log(`Deploying ${target.chain} to ${target.slug} on ${platform}`);
+
+  if (platform === "goldsky") {
+    // graph build just wrote this chain's compiled subgraph to build/,
+    // which is the directory the Goldsky CLI uploads.
+    await run([
+      "bunx",
+      "@goldskycom/cli",
+      "subgraph",
+      "deploy",
+      `${target.slug}/${options.version}`,
+      "--path",
+      "build",
+    ]);
+    continue;
+  }
+
   await run([
     "bunx",
     "graph",
@@ -44,17 +61,17 @@ function parseArgs(args: string[]) {
       const [chain, slug, extra] = argument.split("=");
 
       if (!chain || extra !== undefined) {
-        fail(`Invalid target "${argument}". Use chain=studio-slug.`);
+        fail(`Invalid target "${argument}". Use chain=slug.`);
       }
 
       if (!buildOnly && !slug) {
-        fail(`Missing Studio slug for "${chain}". Use ${chain}=studio-slug.`);
+        fail(`Missing deploy slug for "${chain}". Use ${chain}=slug.`);
       }
 
       return { chain, slug: slug ?? "" };
     });
 
-  if (targets.length === 0 && !buildOnly) fail("Pass at least one chain=studio-slug target.");
+  if (targets.length === 0 && !buildOnly) fail("Pass at least one chain=slug target.");
 
   return {
     buildOnly,
@@ -71,6 +88,11 @@ function requireChain(name: string) {
   }
 
   return chains[name as keyof typeof chains];
+}
+
+function requireTarget(name: string, chain: (typeof chains)[keyof typeof chains]) {
+  if (chain.target === "the-graph" || chain.target === "goldsky") return chain.target;
+  fail(`Unknown target "${chain.target}" for "${name}". Use "the-graph" or "goldsky".`);
 }
 
 async function generateManifest(name: string, chain: (typeof chains)[keyof typeof chains]) {
@@ -121,6 +143,9 @@ Deploy one chain:
 
 Deploy several chains:
   bun run deploy -- mainnet=mainnet-slug base=base-slug --version v0.1.0
+
+The slug is the Subgraph Studio slug or the Goldsky subgraph name,
+depending on the chain's "target" in chain.config.json.
 
 Available chains: ${Object.keys(chains).join(", ")}.
 `);

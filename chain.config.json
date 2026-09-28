@@ -2,6 +2,7 @@
   "sepolia": {
     "network": "sepolia",
     "chainId": 11155111,
+    "target": "the-graph",
     "contracts": {
       "identity": {
         "address": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
@@ -20,6 +21,7 @@
   "mainnet": {
     "network": "mainnet",
     "chainId": 1,
+    "target": "the-graph",
     "contracts": {
       "identity": {
         "address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
@@ -38,6 +40,7 @@
   "base": {
     "network": "base",
     "chainId": 8453,
+    "target": "the-graph",
     "contracts": {
       "identity": {
         "address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
@@ -56,6 +59,7 @@
   "base-sepolia": {
     "network": "base-sepolia",
     "chainId": 84532,
+    "target": "the-graph",
     "contracts": {
       "identity": {
         "address": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
@@ -74,6 +78,7 @@
   "arc": {
     "network": "arc",
     "chainId": 5042,
+    "target": "the-graph",
     "contracts": {
       "identity": {
         "address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
@@ -88,6 +93,7 @@
   "arc-testnet": {
     "network": "arc-testnet",
     "chainId": 5042002,
+    "target": "the-graph",
     "contracts": {
       "identity": {
         "address": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
