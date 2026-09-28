@@ -90,6 +90,44 @@
       }
     }
   },
+  "0g": {
+    "network": "0g",
+    "chainId": 16661,
+    "target": "goldsky",
+    "contracts": {
+      "identity": {
+        "address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+        "startBlock": 30941187
+      },
+      "reputation": {
+        "address": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+        "startBlock": 30941196
+      },
+      "validation": {
+        "address": "0x8004Cb1BF31DAf7788923b405b754f57acEB4272",
+        "startBlock": 30941015
+      }
+    }
+  },
+  "0g-testnet": {
+    "network": "0g-galileo-testnet",
+    "chainId": 16602,
+    "target": "goldsky",
+    "contracts": {
+      "identity": {
+        "address": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+        "startBlock": 31029586
+      },
+      "reputation": {
+        "address": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+        "startBlock": 31029618
+      },
+      "validation": {
+        "address": "0x8004Cb1BF31DAf7788923b405b754f57acEB4272",
+        "startBlock": 31029643
+      }
+    }
+  },
   "arc-testnet": {
     "network": "arc-testnet",
     "chainId": 5042002,
